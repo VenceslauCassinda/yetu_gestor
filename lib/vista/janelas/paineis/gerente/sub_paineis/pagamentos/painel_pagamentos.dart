@@ -9,9 +9,8 @@ import 'pagamentos_c.dart';
 
 class PainelPagamentos extends StatelessWidget {
   late PagamentosC _c;
-  PainelPagamentos({
-    Key? key,
-  }) {
+  Function? accaoAoVoltar;
+  PainelPagamentos({Key? key, this.accaoAoVoltar}) {
     initiC();
   }
 
@@ -34,6 +33,9 @@ class PainelPagamentos extends StatelessWidget {
             accaoNaInsercaoNoCampoTexto: (dado) {},
             accaoAoSair: () {
               _c.terminarSessao();
+            },
+            accaoAoVoltar: () {
+              accaoAoVoltar!();
             },
           ),
         ),

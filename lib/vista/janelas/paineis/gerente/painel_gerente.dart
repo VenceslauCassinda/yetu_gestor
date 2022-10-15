@@ -19,6 +19,7 @@ import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/perfil/pai
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/relatorio/painel.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/sub_paineis/saidas/painel_saidas.dart';
 
+import '../funcionario/sub_paineis/recepcoes/painel.dart';
 import '../funcionario/sub_paineis/vendas/painel_vendas.dart';
 import 'componentes/gaveta.dart';
 import 'sub_paineis/funcionarios/painel_direito.dart';
@@ -82,12 +83,19 @@ class CorpoGerente extends StatelessWidget {
   Obx pegarLayoutPainel() {
     return Obx(() {
       if (_c.painelActual.value.indicadorPainel == PainelActual.PRODUTOS) {
-        return PainelProdutos();
+        return PainelProdutos(
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.FUNCIONARIOS);
+          },
+        );
       }
       if (_c.painelActual.value.indicadorPainel ==
           PainelActual.ENTRADAS_GERAL) {
         return PainelEntradas(
           visaoGeral: true,
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.FUNCIONARIOS);
+          },
         );
       }
       if (_c.painelActual.value.indicadorPainel == PainelActual.ENTRADAS) {
@@ -98,6 +106,9 @@ class CorpoGerente extends StatelessWidget {
       if (_c.painelActual.value.indicadorPainel == PainelActual.SAIDAS_GERAL) {
         return PainelSaidas(
           visaoGeral: true,
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.FUNCIONARIOS);
+          },
         );
       }
       if (_c.painelActual.value.indicadorPainel == PainelActual.SAIDAS) {
@@ -106,7 +117,11 @@ class CorpoGerente extends StatelessWidget {
         );
       }
       if (_c.painelActual.value.indicadorPainel == PainelActual.PAGAMENTOS) {
-        return PainelPagamentos();
+        return PainelPagamentos(
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.FUNCIONARIOS);
+          },
+        );
       }
       if (_c.painelActual.value.indicadorPainel ==
           PainelActual.DIVIDAS_GERAIS) {
@@ -122,6 +137,15 @@ class CorpoGerente extends StatelessWidget {
           },
           c: _c,
           funcionario: _c.painelActual.value.valor as Funcionario,
+        );
+      }
+      if (_c.painelActual.value.indicadorPainel == PainelActual.RECEPCOES) {
+        return PainelRecepcoes(
+          funcionario: _c.funcionarioActual,
+          painelFuncionarioC: _c,
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.FUNCIONARIOS);
+          },
         );
       }
       if (_c.painelActual.value.indicadorPainel == PainelActual.VENDAS) {
@@ -164,6 +188,9 @@ class CorpoGerente extends StatelessWidget {
       if (_c.painelActual.value.indicadorPainel == PainelActual.INVESTIMENTO) {
         return PainelInvestimento(
           gerenteC: _c,
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.FUNCIONARIOS);
+          },
         );
       }
       if (_c.painelActual.value.indicadorPainel == PainelActual.RELATORIO) {

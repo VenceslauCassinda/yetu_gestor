@@ -38,77 +38,86 @@ class GavetaNavegacao extends StatelessWidget {
                 color: primaryColor,
                 borderRadius: BorderRadius.only(topRight: Radius.circular(20))),
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Column(
-              children: [
-                FutureBuilder<Funcionario>(
-                    future: c.inicializarFuncionario(),
-                    builder: (c, s) {
-                      if (s.data == null) {
-                        return CircularProgressIndicator();
-                      }
-                      return Container(
-                        child: InfoGaveta(
-                          cor: branca,
-                          titulo: "${s.data!.nomeCompelto}",
-                        ),
-                      );
-                    }),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Divider(
-                    color: Colors.white,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  FutureBuilder<Funcionario>(
+                      future: c.inicializarFuncionario(),
+                      builder: (c, s) {
+                        if (s.data == null) {
+                          return CircularProgressIndicator();
+                        }
+                        return Container(
+                          child: InfoGaveta(
+                            cor: branca,
+                            titulo: "${s.data!.nomeCompelto}",
+                          ),
+                        );
+                      }),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Divider(
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.home,
-                    titulo: "Início",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.INICIO);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.storefront,
-                    titulo: "Encomendas Gerais",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.ENCOMENDAS_GERAIS);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.storefront,
-                    titulo: "Dívidas Gerais",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.DIVIDAS_GERAIS);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.history,
-                    titulo: "Histórico de Vendas",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.HISTORICO_VENDAS);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.monetization_on,
-                    titulo: "Saídas de Caixa",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.SAIDA_CAIXA);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.arrow_circle_down,
-                    titulo: "Recepções",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.RECEPCOES);
-                    }),
-                ItemDaGaveta(
-                    cor: branca,
-                    icone: Icons.monetization_on_outlined,
-                    titulo: "Dinheiro a mais",
-                    metodoQuandoItemClicado: () async {
-                      c.irParaPainel(PainelActual.DINHEIRO_SOBRA);
-                    }),
-              ],
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.home,
+                      titulo: "Início",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.INICIO);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.storefront,
+                      titulo: "Encomendas Gerais",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.ENCOMENDAS_GERAIS);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.storefront,
+                      titulo: "Dívidas Gerais",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.DIVIDAS_GERAIS);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.history,
+                      titulo: "Histórico de Vendas",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.HISTORICO_VENDAS);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.monetization_on,
+                      titulo: "Caixa",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.SAIDA_CAIXA);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.arrow_circle_down,
+                      titulo: "Recepções",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.RECEPCOES);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.monetization_on_outlined,
+                      titulo: "Dinheiro a mais",
+                      metodoQuandoItemClicado: () async {
+                        c.irParaPainel(PainelActual.DINHEIRO_SOBRA);
+                      }),
+                  ItemDaGaveta(
+                      cor: branca,
+                      icone: Icons.logout,
+                      titulo: "Sair",
+                      metodoQuandoItemClicado: () async {
+                        c.terminarSessao();
+                      }),
+                ],
+              ),
             ),
           ),
         ),

@@ -12,15 +12,13 @@ import '../../painel_gerente_c.dart';
 import 'painel_c.dart';
 
 class PainelDividas extends StatelessWidget {
-  PainelDividas({
-    Key? key,
-    required this.gerenteC,
-  }) {
+  PainelDividas({Key? key, required this.gerenteC, this.accaoAoVoltar}) {
     initiC();
   }
 
   late PainelGerenteC gerenteC;
   late PainelDividasC _c;
+  Function? accaoAoVoltar;
 
   initiC() {
     try {
@@ -46,7 +44,7 @@ class PainelDividas extends StatelessWidget {
               _c.terminarSessao();
             },
             accaoAoVoltar: () {
-              gerenteC.irParaPainel(PainelActual.INICIO);
+              accaoAoVoltar!();
             },
           ),
         ),

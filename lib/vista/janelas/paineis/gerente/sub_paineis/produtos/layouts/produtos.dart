@@ -26,6 +26,7 @@ class LayoutProdutos extends StatelessWidget {
                 if (accaoAoClicarCadaProduto != null) {
                   accaoAoClicarCadaProduto!(lista[indice]);
                 }
+        return;
               },
               child: ItemProduto(
                 produto: lista[indice],

@@ -13,27 +13,31 @@ class LayoutAddSaidaCaixa extends StatelessWidget {
   late ObservadorCampoTexto _observadorCampoTexto;
   late ObservadorButoes _observadorButoes = ObservadorButoes();
 
-  final Function(String valor, String motivo) accaoAoFinalizar;
+  final Function(String valor, String motivo, bool entradaOuSaida) accaoAoFinalizar;
 
   String? valor;
   String? motivo;
   final String titulo;
   late BuildContext context;
   late String opcaoRetiradaSelecionada;
+  var entradaOuSaida = true.obs;
 
   LayoutAddSaidaCaixa(
       {required this.accaoAoFinalizar, required this.titulo, valor}) {
     _observadorCampoTexto = ObservadorCampoTexto();
     _observadorButoes = ObservadorButoes();
   }
+
   @override
   Widget build(BuildContext context) {
+    
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(100),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               titulo,
@@ -104,6 +108,39 @@ class LayoutAddSaidaCaixa extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
+            Obx(() {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 250,
+                    child: RadioListTile(
+                        selected: entradaOuSaida.value,
+                        title: Text("Entrada de Caixa"),
+                        value: true,
+                        groupValue: entradaOuSaida.value,
+                        onChanged: (novo) {
+                          entradaOuSaida.value = novo as bool;
+                        }),
+                  ),
+                  Container(
+                    width: 250,
+                    child: RadioListTile(
+                        title: Text("Saída de Caixa"),
+                        value: false,
+                        selected: !entradaOuSaida.value,
+                        groupValue: entradaOuSaida.value,
+                        onChanged: (novo) {
+                          entradaOuSaida.value = novo as bool;
+                        }),
+                  ),
+                ],
+              );
+            }),
+            const SizedBox(
+              height: 20,
+            ),
             Row(
               children: [
                 Container(
@@ -129,7 +166,7 @@ class LayoutAddSaidaCaixa extends StatelessWidget {
                           .butaoFinalizarCadastroInstituicao.value,
                       tituloButao: "Finalizar",
                       metodoChamadoNoClique: () {
-                        accaoAoFinalizar(valor!, motivo!);
+                        accaoAoFinalizar(valor!, motivo!, entradaOuSaida.value);
                       },
                     ),
                   );

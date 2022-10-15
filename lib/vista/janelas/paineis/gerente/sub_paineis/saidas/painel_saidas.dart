@@ -15,8 +15,9 @@ class PainelSaidas extends StatelessWidget {
   late SaidasC _c;
   final bool visaoGeral;
   late PainelGerenteC _painelGerenteC;
-
-  PainelSaidas({Key? key, required this.visaoGeral}) : super(key: key) {
+  Function? accaoAoVoltar;
+  PainelSaidas({Key? key, required this.visaoGeral, this.accaoAoVoltar})
+      : super(key: key) {
     initiC();
     _painelGerenteC = Get.find();
   }
@@ -44,6 +45,9 @@ class PainelSaidas extends StatelessWidget {
             },
             accaoAoSair: () {
               _c.terminarSessao();
+            },
+            accaoAoVoltar: () {
+              accaoAoVoltar!();
             },
           ),
         ),

@@ -28,4 +28,15 @@ class ProvedorSaidaCaixa implements ProvedorSaidaCaixaI {
   Future<int> removerSaidaCaixaDeId(int id) async {
     return await _saidaCaixaDao.removerSaidaCaixaDeId(id);
   }
+
+  @override
+  Future<void> removerTudo() async {
+    await _saidaCaixaDao.removerTudo();
+  }
+
+  @override
+  @override
+  Future<void> removerAntesDe(DateTime data) async {
+    await _saidaCaixaDao.removerAntes(data);
+  }
 }

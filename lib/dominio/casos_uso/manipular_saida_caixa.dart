@@ -24,4 +24,14 @@ class ManipularSaidaCaixa implements ManipularSaidaCaixaI {
   Future<int> removerSaidaCaixaDeId(int id) async {
     return await _provedorSaidaCaixaI.removerSaidaCaixaDeId(id);
   }
+
+  @override
+  Future<void> removerAntesDe(DateTime data) async {
+    await _provedorSaidaCaixaI.removerAntesDe(data);
+  }
+
+  @override
+  Future<void> removerTudo() async {
+    await _provedorSaidaCaixaI.removerTudo();
+  }
 }

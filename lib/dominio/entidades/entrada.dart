@@ -6,7 +6,6 @@ import 'receccao.dart';
 
 class Entrada {
   Produto? produto;
-  Receccao? receccao;
   int? id;
   int? estado;
   int? idProduto;
@@ -17,7 +16,6 @@ class Entrada {
   Entrada(
       {this.id,
       this.produto,
-      this.receccao,
       required this.estado,
       required this.idProduto,
       required this.idRececcao,

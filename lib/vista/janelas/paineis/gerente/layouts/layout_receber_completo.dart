@@ -10,6 +10,7 @@ import 'package:componentes_visuais/dialogo/dialogos.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/entidades/saida.dart';
+import 'package:yetu_gestor/solucoes_uteis/console.dart';
 import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 
 import '../../../../../recursos/constantes.dart';
@@ -18,15 +19,17 @@ class LayoutReceberCompleto extends StatelessWidget {
   late ObservadorCampoTexto _observadorCampoTexto;
   late ObservadorCampoTexto _observadorCampoTexto2;
   late ObservadorCampoTexto _observadorCampoTexto3;
+  late ObservadorCampoTexto _observadorCampoTexto4;
   late ObservadorButoes _observadorButoes = ObservadorButoes();
   var quantidadeTotal = 0.obs;
   var custoTotal = 0.0.obs;
+  var precoCompra = 0.obs;
+  var pagavel = false.obs;
 
-  final Function(
-          String quantidadePorLotes, String quantidadeLotes, String precoLote)
-      accaoAoFinalizar;
+  final Function(int quantidadePorLotes, int quantidadeLotes, double precoLote,
+      double custo, bool pagavel) accaoAoFinalizar;
 
-  String? quantidadePorLotes, quantidadeLotes, precoLote;
+  String? quantidadePorLotes, quantidadeLotes, precoLote, custo = "0";
   final String titulo;
   late BuildContext context;
   final bool comOpcaoRetirada;
@@ -39,6 +42,7 @@ class LayoutReceberCompleto extends StatelessWidget {
     _observadorCampoTexto = ObservadorCampoTexto();
     _observadorCampoTexto2 = ObservadorCampoTexto();
     _observadorCampoTexto3 = ObservadorCampoTexto();
+    _observadorCampoTexto4 = ObservadorCampoTexto();
     _observadorButoes = ObservadorButoes();
   }
   @override
@@ -66,11 +70,11 @@ class LayoutReceberCompleto extends StatelessWidget {
               context: context,
               campoBordado: false,
               icone: const Icon(Icons.lock),
-              tipoCampoTexto: TipoCampoTexto.preco,
+              tipoCampoTexto: TipoCampoTexto.numero,
               dicaParaCampo: "Preço do Lote",
               metodoChamadoNaInsersao: (String valor) {
+                precoLote = valor;
                 actualizarDados();
-                quantidadeLotes = valor;
                 _observadorCampoTexto.observarCampo(
                     valor, TipoCampoTexto.preco);
                 if (valor.isEmpty) {
@@ -81,10 +85,12 @@ class LayoutReceberCompleto extends StatelessWidget {
                   precoLote ?? "",
                   quantidadeLotes ?? "",
                   quantidadePorLotes ?? "",
+                  custo ?? "",
                 ], [
                   _observadorCampoTexto.valorPrecoValido.value,
                   _observadorCampoTexto2.valorNumeroValido.value,
                   _observadorCampoTexto3.valorNumeroValido.value,
+                  _observadorCampoTexto4.valorPrecoValido.value,
                 ]);
               },
             ),
@@ -106,8 +112,8 @@ class LayoutReceberCompleto extends StatelessWidget {
               tipoCampoTexto: TipoCampoTexto.numero,
               dicaParaCampo: "Quantidade de Lotes",
               metodoChamadoNaInsersao: (String valor) {
-                actualizarDados();
                 quantidadeLotes = valor;
+                actualizarDados();
                 _observadorCampoTexto2.observarCampo(
                     valor, TipoCampoTexto.numero);
                 if (valor.isEmpty) {
@@ -118,10 +124,12 @@ class LayoutReceberCompleto extends StatelessWidget {
                   precoLote ?? "",
                   quantidadeLotes ?? "",
                   quantidadePorLotes ?? "",
+                  custo ?? "",
                 ], [
                   _observadorCampoTexto.valorPrecoValido.value,
                   _observadorCampoTexto2.valorNumeroValido.value,
                   _observadorCampoTexto3.valorNumeroValido.value,
+                  _observadorCampoTexto4.valorPrecoValido.value,
                 ]);
               },
             ),
@@ -143,8 +151,8 @@ class LayoutReceberCompleto extends StatelessWidget {
               tipoCampoTexto: TipoCampoTexto.numero,
               dicaParaCampo: "Quantidade de Unidades por Lotes",
               metodoChamadoNaInsersao: (String valor) {
+                quantidadePorLotes = valor;
                 actualizarDados();
-                quantidadeLotes = valor;
                 _observadorCampoTexto3.observarCampo(
                     valor, TipoCampoTexto.numero);
                 if (valor.isEmpty) {
@@ -155,10 +163,12 @@ class LayoutReceberCompleto extends StatelessWidget {
                   precoLote ?? "",
                   quantidadeLotes ?? "",
                   quantidadePorLotes ?? "",
+                  custo ?? "",
                 ], [
                   _observadorCampoTexto.valorPrecoValido.value,
                   _observadorCampoTexto2.valorNumeroValido.value,
                   _observadorCampoTexto3.valorNumeroValido.value,
+                  _observadorCampoTexto4.valorPrecoValido.value,
                 ]);
               },
             ),
@@ -172,14 +182,82 @@ class LayoutReceberCompleto extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Text(
-              "Quantidade Total: ${formatarMesOuDia(quantidadeTotal.value)}",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            CampoTexto(
+              textoPadrao: custo == "0" ? null : custo,
+              context: context,
+              campoBordado: false,
+              icone: const Icon(Icons.lock),
+              tipoCampoTexto: TipoCampoTexto.numero,
+              dicaParaCampo: "Custo de Aquisição",
+              metodoChamadoNaInsersao: (String valor) {
+                custo = valor;
+                actualizarDados();
+                _observadorCampoTexto4.observarCampo(
+                    valor, TipoCampoTexto.preco);
+                if (valor.isEmpty) {
+                  _observadorCampoTexto4.mudarValorValido(
+                      true, TipoCampoTexto.preco);
+                }
+                _observadorButoes.mudarValorFinalizarCadastroInstituicao([
+                  precoLote ?? "",
+                  quantidadeLotes ?? "",
+                  quantidadePorLotes ?? "",
+                  custo ?? "",
+                ], [
+                  _observadorCampoTexto.valorPrecoValido.value,
+                  _observadorCampoTexto2.valorNumeroValido.value,
+                  _observadorCampoTexto3.valorNumeroValido.value,
+                  _observadorCampoTexto4.valorPrecoValido.value,
+                ]);
+              },
             ),
-            Text(
-              "Custo Total: ${formatar(custoTotal.value)}",
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            Obx(() {
+              return _observadorCampoTexto4.valorPrecoValido.value == true
+                  ? Container()
+                  : LabelErros(
+                      sms: "Custo inválido!",
+                    );
+            }),
+            const SizedBox(
+              height: 20,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Pagavel: "),
+                Obx(() {
+                  return Checkbox(
+                      value: pagavel.value,
+                      onChanged: (novo) {
+                        pagavel.value = novo ?? false;
+                      });
+                }),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Obx(() {
+              return Text(
+                "Quantidade Total: ${formatarInteiroComMilhares(quantidadeTotal.value)}",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              );
+            }),
+            Obx(() {
+              return Text(
+                "Custo Total: ${formatar(custoTotal.value)}",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              );
+            }),
+            Obx(() {
+              return Text(
+                "Preço de Compra(Unidade): ${formatarInteiroComMilhares(precoCompra.value)}",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
@@ -209,7 +287,11 @@ class LayoutReceberCompleto extends StatelessWidget {
                       tituloButao: "Finalizar",
                       metodoChamadoNoClique: () {
                         accaoAoFinalizar(
-                            quantidadePorLotes!, quantidadeLotes!, precoLote!);
+                            int.parse(quantidadePorLotes!),
+                            int.parse(quantidadeLotes!),
+                            double.parse(precoLote!),
+                            double.parse(custo!),
+                            pagavel.value);
                       },
                     ),
                   );
@@ -224,15 +306,29 @@ class LayoutReceberCompleto extends StatelessWidget {
 
   void actualizarDados() {
     try {
+      if (custo != null) {
+        if (custo!.isEmpty) {
+          custo = "0";
+        }
+      }
       if (precoLote != null &&
           quantidadeLotes != null &&
           quantidadePorLotes != null) {
-        custoTotal.value = int.parse(quantidadeLotes!) *
-            int.parse(quantidadePorLotes!) *
-            double.parse(precoLote!);
-        quantidadeTotal.value =
-            int.parse(quantidadeLotes!) * int.parse(quantidadePorLotes!);
+        custoTotal.value = calcularCustoTotal();
       }
+      if (quantidadeLotes != null && quantidadePorLotes != null) {
+        quantidadeTotal.value = calcularQuantidadeTotal();
+      }
+
+      precoCompra.value = custoTotal.value ~/ quantidadeTotal.value;
     } catch (e) {}
+  }
+
+  int calcularQuantidadeTotal() =>
+      int.parse(quantidadeLotes!) * int.parse(quantidadePorLotes!);
+
+  double calcularCustoTotal() {
+    return (int.parse(quantidadeLotes!) * double.parse(precoLote!)) +
+        double.parse(custo!);
   }
 }

@@ -16,7 +16,7 @@ class LayoutQuantidade extends StatelessWidget {
   late ObservadorCampoTexto _observadorCampoTexto;
   late ObservadorButoes _observadorButoes = ObservadorButoes();
 
-  final Function(String quantidade, String? opcaoRetiradaSelecionada)
+  final Function(int quantidade, String? opcaoRetiradaSelecionada)
       accaoAoFinalizar;
 
   String? quantidade;
@@ -122,7 +122,8 @@ class LayoutQuantidade extends StatelessWidget {
                           .butaoFinalizarCadastroInstituicao.value,
                       tituloButao: "Finalizar",
                       metodoChamadoNoClique: () {
-                        accaoAoFinalizar(quantidade!, opcaoRetiradaSelecionada);
+                        accaoAoFinalizar(
+                            int.parse(quantidade!), opcaoRetiradaSelecionada);
                       },
                     ),
                   );

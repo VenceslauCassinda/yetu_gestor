@@ -5,4 +5,6 @@ abstract class ProvedorSaidaCaixaI {
   Future<bool> actualizarSaidaCaixa(SaidaCaixa saidaCaixa);
   Future<int> removerSaidaCaixaDeId(int id);
   Future<List<SaidaCaixa>> pegarLista();
+  Future<void> removerTudo();
+  Future<void> removerAntesDe(DateTime data);
 }

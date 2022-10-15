@@ -14,7 +14,7 @@ class ItemProduto extends StatelessWidget {
   ItemProduto({
     Key? key,
     required this.produto,
-    required this.c,
+    this.c,
   }) : super(key: key);
 
   @override
@@ -69,7 +69,7 @@ class ItemProduto extends StatelessWidget {
                 titulo: "Receber",
                 icone: Icons.call_received_sharp,
                 metodoQuandoItemClicado: () {
-                  c?.mostrarDialogoReceber(produto);
+                  c?.mostrarDialogoReceberCompleto(produto);
                 },
                 cor: primaryColor,
               ),

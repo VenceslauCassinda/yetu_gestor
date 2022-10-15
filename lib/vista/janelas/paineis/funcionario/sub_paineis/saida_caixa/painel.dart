@@ -8,6 +8,7 @@ import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/saida_
 
 import '../../../../../../dominio/entidades/painel_actual.dart';
 import '../../../../../../recursos/constantes.dart';
+import '../../../../../../solucoes_uteis/formato_dado.dart';
 import '../../../../../componentes/item_dinheiro_sobra.dart';
 import '../../../../../componentes/pesquisa.dart';
 import '../../painel_funcionario_c.dart';
@@ -38,7 +39,7 @@ class PainelSaidaCaixa extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: LayoutPesquisa(accaoNaInsercaoNoCampoTexto: (dado) {
             saidaCaixaC.aoPesquisar(dado);
           }, accaoAoSair: () {
@@ -55,9 +56,49 @@ class PainelSaidaCaixa extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 20),
           width: double.infinity,
           child: const Text(
-            "Saídas de Caixa",
+            "OPERAÇÕES DE CAIXA",
             style: TextStyle(color: primaryColor, fontSize: 30),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Divider(),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          width: double.infinity,
+          child: Row(
+            children: [
+              Visibility(
+                visible:
+                    saidaCaixaC.funcionario.nivelAcesso == NivelAcesso.GERENTE,
+                child: ModeloButao(
+                  corButao: primaryColor,
+                  icone: Icons.delete,
+                  corTitulo: Colors.white,
+                  butaoHabilitado: true,
+                  tituloButao: "Limpar",
+                  metodoChamadoNoClique: () {
+                    saidaCaixaC.mostrarDialogoEliminar(context, true);
+                  },
+                  metodoChamadoNoLongoClique: () {
+                    saidaCaixaC.mostrarDialogoEliminar(context, false);
+                  },
+                ),
+              ),
+              Spacer(),
+              Obx(() {
+                return Text(
+                  "SALDO ACTUAL: ${formatar(saidaCaixaC.caixaAtual.value)}",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                );
+              }),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Divider(),
         ),
         Expanded(
           child: Padding(
@@ -78,18 +119,36 @@ class PainelSaidaCaixa extends StatelessWidget {
             })),
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(20),
-          child: ModeloButao(
-            corButao: primaryColor,
-            corTitulo: Colors.white,
-            butaoHabilitado: true,
-            tituloButao: "Nova Saída",
-            metodoChamadoNoClique: () {
-              saidaCaixaC.mostrarDialogoNovaValor(context);
-            },
-          ),
-        )
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: ModeloButao(
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Relatório",
+                icone: Icons.message,
+                metodoChamadoNoClique: () {
+                  saidaCaixaC.mostrarDialogoRelatorio(context);
+                },
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.all(20),
+              child: ModeloButao(
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Nova Operação",
+                metodoChamadoNoClique: () {
+                  saidaCaixaC.mostrarDialogoNovaValor(context);
+                },
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

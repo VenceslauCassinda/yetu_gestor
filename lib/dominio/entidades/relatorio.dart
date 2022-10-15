@@ -1,7 +1,5 @@
 import 'package:yetu_gestor/dominio/entidades/caixa.dart';
 import 'package:yetu_gestor/dominio/entidades/invoice.dart';
-
-import 'customer.dart';
 import 'supplier.dart';
 
 class Relatorio {

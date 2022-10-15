@@ -2,9 +2,11 @@ import 'package:componentes_visuais/componentes/butoes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yetu_gestor/dominio/entidades/entrada.dart';
+import 'package:yetu_gestor/dominio/entidades/nivel_acesso.dart';
 import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/dominio/entidades/produto.dart';
 import 'package:yetu_gestor/dominio/entidades/receccao.dart';
+import 'package:yetu_gestor/solucoes_uteis/formato_dado.dart';
 import 'package:yetu_gestor/vista/componentes/item_receccao.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/gerente/painel_gerente_c.dart';
 import '../../../../../../dominio/entidades/funcionario.dart';
@@ -17,11 +19,14 @@ import 'painel_c.dart';
 
 class PainelRecepcoes extends StatelessWidget {
   late RecepcoesC _c;
-  late PainelFuncionarioC painelFuncionarioC;
+  var painelFuncionarioC;
   final Funcionario funcionario;
-
+  Function? accaoAoVoltar;
   PainelRecepcoes(
-      {Key? key, required this.funcionario, required this.painelFuncionarioC})
+      {Key? key,
+      required this.funcionario,
+      required this.painelFuncionarioC,
+      this.accaoAoVoltar})
       : super(key: key) {
     initiC();
   }
@@ -42,7 +47,7 @@ class PainelRecepcoes extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 62),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: LayoutPesquisa(
             accaoNaInsercaoNoCampoTexto: (dado) {
               _c.aoPesquisar(dado);
@@ -51,20 +56,102 @@ class PainelRecepcoes extends StatelessWidget {
               _c.terminarSessao();
             },
             accaoAoVoltar: () {
-              _c.irParaPainel(PainelActual.INICIO);
+              accaoAoVoltar!();
             },
           ),
         ),
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-              child: Text(
-                "RECEPÇÕES",
-                style: TextStyle(color: primaryColor),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 0),
+              child: Obx(() {
+                return Text(
+                  "RECEPÇÕES(${_c.lista.length})",
+                  style: TextStyle(color: primaryColor),
+                );
+              }),
             ),
           ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Divider(),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Row(
+            children: [
+              ModeloButao(
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Todas",
+                metodoChamadoNoClique: () {
+                  _c.pegarDados(limparExistente: true);
+                },
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              ModeloButao(
+                icone: Icons.check_box_outlined,
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Pagas",
+                metodoChamadoNoClique: () {
+                  _c.pegarRececcoesComFiltro(true);
+                },
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              ModeloButao(
+                corButao: primaryColor,
+                icone: Icons.check_box_outline_blank_rounded,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Não Pagas",
+                metodoChamadoNoClique: () {
+                  _c.pegarRececcoesComFiltro(false);
+                },
+              ),
+              SizedBox(
+                width: 40,
+              ),
+              Visibility(
+                visible: _c.funcionario.nivelAcesso == NivelAcesso.GERENTE,
+                child: ModeloButao(
+                  corButao: primaryColor,
+                  icone: Icons.delete,
+                  corTitulo: Colors.white,
+                  butaoHabilitado: true,
+                  tituloButao: "Limpar",
+                  metodoChamadoNoClique: () {
+                    _c.mostrarDialogoEliminar(context, true);
+                  },
+                  metodoChamadoNoLongoClique: () {
+                    _c.mostrarDialogoEliminar(context, false);
+                  },
+                ),
+              ),
+              Spacer(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                child: Obx(() {
+                  return Text(
+                    "TOTAL DE RECEPÇÕES NÃO PAGAS: ${formatar(_c.totalNaoPago.value)}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  );
+                }),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Divider(),
         ),
         Expanded(
           child: Obx(
@@ -74,6 +161,9 @@ class PainelRecepcoes extends StatelessWidget {
                         visaoGeral: false,
                         receccao: entrada,
                         aoClicar: () {},
+                        aoPagar: ((receccao) {
+                          _c.pagarRececcao(receccao);
+                        }),
                       ))
                   .toList();
               if (itens.isEmpty) {
@@ -87,17 +177,35 @@ class PainelRecepcoes extends StatelessWidget {
             },
           ),
         ),
-        Container(
-          margin: EdgeInsets.all(20),
-          child: ModeloButao(
-            corButao: primaryColor,
-            corTitulo: Colors.white,
-            butaoHabilitado: true,
-            tituloButao: "Receber Produto",
-            metodoChamadoNoClique: () {
-              _c.mostrarDialogoProdutos(context);
-            },
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              margin: EdgeInsets.all(20),
+              child: ModeloButao(
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Relatório",
+                icone: Icons.message,
+                metodoChamadoNoClique: () {
+                  _c.mostrarDialogoRelatorio(context);
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(20),
+              child: ModeloButao(
+                corButao: primaryColor,
+                corTitulo: Colors.white,
+                butaoHabilitado: true,
+                tituloButao: "Receber Produto",
+                metodoChamadoNoClique: () {
+                  _c.mostrarDialogoProdutos(context);
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );

@@ -27,6 +27,7 @@ import '../../../../contratos/casos_uso/manipular_funcionario_i.dart';
 import '../../../../dominio/entidades/painel_actual.dart';
 import '../../../aplicacao_c.dart';
 import '../funcionario/painel_funcionario_c.dart';
+import '../funcionario/sub_paineis/recepcoes/painel_c.dart';
 
 class PainelGerenteC extends GetxController {
   var painelActual =
@@ -136,6 +137,9 @@ class PainelGerenteC extends GetxController {
     }
     if (PainelActual.DEFINICOES == painelActual.value.indicadorPainel) {
       Get.delete<PagamentosC>();
+    }
+    if (PainelActual.RECEPCOES == painelActual.value.indicadorPainel) {
+      Get.delete<RecepcoesC>();
     }
 
     ScreenSize tela = Get.find();

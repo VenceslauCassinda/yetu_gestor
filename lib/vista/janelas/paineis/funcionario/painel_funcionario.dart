@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:responsive_layout_builder/responsive_layout_builder.dart';
 import 'package:yetu_gestor/dominio/entidades/painel_actual.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/dinheiro_sobra/painel.dart';
+import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/recepcoes/painel_c.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/saida_caixa/painel.dart';
 import 'package:yetu_gestor/vista/janelas/paineis/funcionario/sub_paineis/vendas/painel_vendas.dart';
 import '../../../../recursos/constantes.dart';
@@ -107,6 +108,9 @@ class Corpo extends StatelessWidget {
         return PainelRecepcoes(
           funcionario: _c.funcionarioActual,
           painelFuncionarioC: _c,
+          accaoAoVoltar: () {
+            _c.irParaPainel(PainelActual.INICIO);
+          },
         );
       }
       if (_c.painelActual.value.indicadorPainel ==

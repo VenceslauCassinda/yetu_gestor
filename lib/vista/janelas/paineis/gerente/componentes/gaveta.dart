@@ -78,6 +78,13 @@ class GavetaNavegacao extends StatelessWidget {
                     }),
                 ItemDaGaveta(
                     cor: branca,
+                    icone: Icons.arrow_circle_down,
+                    titulo: "Recepções",
+                    metodoQuandoItemClicado: () async {
+                      c.irParaPainel(PainelActual.RECEPCOES);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
                     icone: Icons.storefront,
                     titulo: "Dívidas",
                     metodoQuandoItemClicado: () async {
@@ -107,7 +114,7 @@ class GavetaNavegacao extends StatelessWidget {
                 ItemDaGaveta(
                     cor: branca,
                     icone: Icons.monetization_on,
-                    titulo: "Saídas de Caixa",
+                    titulo: "Caixa",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.SAIDA_CAIXA);
                     }),
@@ -145,6 +152,13 @@ class GavetaNavegacao extends StatelessWidget {
                     titulo: "Definições",
                     metodoQuandoItemClicado: () async {
                       c.irParaPainel(PainelActual.DEFINICOES);
+                    }),
+                ItemDaGaveta(
+                    cor: branca,
+                    icone: Icons.logout,
+                    titulo: "Sair",
+                    metodoQuandoItemClicado: () async {
+                      c.terminarSessao();
                     }),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get/get.dart' as getx;
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -108,21 +109,24 @@ LazyDatabase _openConnection() {
 class BancoDados extends _$BancoDados {
   BancoDados() : super(_openConnection());
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(
-        onCreate: (Migrator m) async {
-          await m.createAll();
-          var usuario = Usuario.registo("admin", "11111111");
-          usuario.nivelAcesso = NivelAcesso.ADMINISTRADOR;
-          await ManipularUsuario(ProvedorUsuario()).registarUsuario(usuario);
-          await DefinicoesDao(this).adicionarDefinicoes(Definicoes(
-              estado: Estado.ATIVADO,
-              tipoEntidade: TipoEntidade.COMERCIAL,
-              tipoNegocio: TipoNegocio.RETALHO));
-        },
-        onUpgrade: (m, a, n) async {});
+    return MigrationStrategy(onCreate: (Migrator m) async {
+      await m.createAll();
+      var usuario = Usuario.registo("admin", "11111111");
+      usuario.nivelAcesso = NivelAcesso.ADMINISTRADOR;
+      await ManipularUsuario(ProvedorUsuario()).registarUsuario(usuario);
+      await DefinicoesDao(this).adicionarDefinicoes(Definicoes(
+          estado: Estado.ATIVADO,
+          tipoEntidade: TipoEntidade.COMERCIAL,
+          tipoNegocio: TipoNegocio.RETALHO));
+    }, onUpgrade: (m, from, to) async {
+      if (from < 4) {
+        await m.addColumn(tabelaRececcao, tabelaRececcao.dataPagamento);
+        await m.addColumn(tabelaRececcao, tabelaRececcao.idPagante);
+      }
+    });
   }
 }

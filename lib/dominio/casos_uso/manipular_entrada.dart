@@ -16,7 +16,7 @@ class ManipularEntrada implements ManipularEntradaI {
   Future<int> registarEntrada(Entrada entrada) async {
     var res = await _provedorEntradaI.registarEntrada(entrada);
     var id = await _manipularStockI.aumentarQuantidadeStock(
-        entrada.produto!.id!, entrada.quantidade!);
+        entrada.idProduto!, entrada.quantidade!);
     // print((await _manipularStockI.pegarStockDeId(id))?.toString());
     return res;
   }
@@ -34,6 +34,7 @@ class ManipularEntrada implements ManipularEntradaI {
   @override
   Future<List<Entrada>> pegarListaEntradasFuncionario(
       Funcionario funcionario) async {
-    return await _provedorEntradaI.pegarListaEntradasFuncionario(funcionario.id!);
+    return await _provedorEntradaI
+        .pegarListaEntradasFuncionario(funcionario.id!);
   }
 }

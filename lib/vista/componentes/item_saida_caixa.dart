@@ -29,12 +29,15 @@ class ItemSaidaCaixa extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Valor: ${formatar(saidaCaixa.valor ?? 0)} KZ"),
+                Text("Valor: ${formatar(saidaCaixa.valor ?? 0)} KZ"
+                    .replaceAll("-", "")),
                 Text("Motivo: ${saidaCaixa.motivo ?? "Nenhum"}"),
                 Text(
                     "Data: ${saidaCaixa.data.toString().replaceAll(" ", " às ").replaceAll(".000", "")}"),
                 Text(
-                    "Saida realizada por: ${saidaCaixa.funcionario?.nomeCompelto ?? "Ninguem"}"),
+                    "Tipo de Operação: ${formatar(saidaCaixa.valor ?? 0).toString().contains("-") ? "Saída de Caixa" : "Entrada de Caixa"}"),
+                Text(
+                    "Operação realizada por: ${saidaCaixa.funcionario?.nomeCompelto ?? "Ninguem"}"),
               ],
             ),
             const Spacer(),

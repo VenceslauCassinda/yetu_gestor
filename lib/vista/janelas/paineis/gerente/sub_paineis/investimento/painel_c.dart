@@ -53,7 +53,7 @@ class PainelInvestimentoC extends GetxController {
     _manipularProdutoI = ManipularProduto(
         ProvedorProduto(), _manipularStockI, ManipularPreco(ProvedorPreco()));
     _manipularRececcaoI = ManipularRececcao(ProvedorRececcao(),
-        ManipularEntrada(ProvedorEntrada(), _manipularStockI));
+        ManipularEntrada(ProvedorEntrada(), _manipularStockI), _manipularProdutoI);
     _manipularFuncionarioI = ManipularFuncionario(
         ManipularUsuario(ProvedorUsuario()), ProveedorFuncionario());
     _manipularSaidaI = ManipularSaida(ProvedorSaida(), _manipularStockI);
@@ -77,7 +77,7 @@ class PainelInvestimentoC extends GetxController {
           (cada.stock?.quantidade ?? 0)
               .toString()
               .toLowerCase()
-              .contains(f.toLowerCase()) ) {
+              .contains(f.toLowerCase())) {
         lista.add(cada);
       }
     }
@@ -144,49 +144,13 @@ class PainelInvestimentoC extends GetxController {
 
   void mostrarDialogoAdicionarProduto() {
     mostrarDialogoDeLayou(LayoutProduto(
-      accaoAoFinalizar: (nome, precoCompra,) async {
+      accaoAoFinalizar: (
+        nome,
+        precoCompra,
+      ) async {
         await _adicionarProduto(nome, precoCompra);
       },
     ));
-  }
-
-  void mostrarDialogoReceber(Produto produto) {
-    mostrarDialogoDeLayou(LayoutQuantidade(
-        comOpcaoRetirada: false,
-        accaoAoFinalizar: (quantidade, opcaoRetiradaSelecionada) async {
-          var motivo = Entrada.MOTIVO_ABASTECIMENTO;
-          await _receberProduto(produto, quantidade, motivo);
-        },
-        titulo: "Receber produto ${produto.nome}"));
-  }
-
-  Future<void> _receberProduto(
-      Produto produto, String quantidade, String motivo) async {
-    AplicacaoC aplicacaoC = Get.find();
-    var funcionario = await _manipularFuncionarioI
-        .pegarFuncionarioDoUsuarioDeId((aplicacaoC.pegarUsuarioActual())!.id!);
-    await _manipularRececcaoI.receberProduto(
-        produto, int.parse(quantidade), funcionario, motivo);
-    _somarQuantidadeProduto(produto, quantidade);
-  }
-
-  void mostrarDialogoAumentar(Produto produto) {
-    mostrarDialogoDeLayou(LayoutQuantidade(
-        comOpcaoRetirada: false,
-        accaoAoFinalizar: (quantidade, o) async {
-          var motivo = Entrada.MOTIVO_AJUSTE_STOCK;
-          await _receberProduto(produto, quantidade, motivo);
-        },
-        titulo: "Aumentar quantidade do produto ${produto.nome}"));
-  }
-
-  void mostrarDialogoRetirar(Produto produto) {
-    mostrarDialogoDeLayou(LayoutQuantidade(
-        comOpcaoRetirada: true,
-        accaoAoFinalizar: (quantidade, opcaoRetiradaSelecionada) async {
-          await _retirarProduto(produto, quantidade, opcaoRetiradaSelecionada!);
-        },
-        titulo: "Retirar quantidade do produto ${produto.nome}"));
   }
 
   void _somarQuantidadeProduto(Produto produto, String quantidade) {
@@ -282,8 +246,8 @@ class PainelInvestimentoC extends GetxController {
     }
   }
 
-  Future<void> _actualizarProduto(String nome, String precoCompra,
-    Produto produto) async {
+  Future<void> _actualizarProduto(
+      String nome, String precoCompra, Produto produto) async {
     try {
       for (var i = 0; i < lista.length; i++) {
         if (lista[i].id == produto.id) {

@@ -25,11 +25,16 @@ import '../configuracao/test_config.dart';
 void main() {
   TestConfig.prepareInitDataBase();
   Get.put(BancoDados());
-var maniStock = ManipularStock(ProvedorStock());
-  ManipularRececcaoI manipularRececcaoI = ManipularRececcao(ProvedorRececcao(),
-      ManipularEntrada(ProvedorEntrada(), ManipularStock(ProvedorStock())));
-  ManipularProdutoI manipularProdutoI = ManipularProduto(ProvedorProduto(),
-      maniStock, ManipularPreco(ProvedorPreco()));
+  var maniStock = ManipularStock(ProvedorStock());
+  ManipularProdutoI manipularProdutoI = ManipularProduto(
+      ProvedorProduto(), maniStock, ManipularPreco(ProvedorPreco()));
+  ManipularRececcaoI manipularRececcaoI = ManipularRececcao(
+      ProvedorRececcao(),
+      ManipularEntrada(
+        ProvedorEntrada(),
+        ManipularStock(ProvedorStock()),
+      ),
+      manipularProdutoI);
   ManipularFuncionario manipularFuncionario = ManipularFuncionario(
       ManipularUsuario(ProvedorUsuario()), ProveedorFuncionario());
 
@@ -55,10 +60,10 @@ var maniStock = ManipularStock(ProvedorStock());
     int qtd = produto.stock!.quantidade!;
 
     var funcionario = funacionarios.first;
-    await manipularRececcaoI.receberProduto(produto, 100, funcionario, Entrada.MOTIVO_ABASTECIMENTO);
+    // await manipularRececcaoI.receberProduto(produto, 100, funcionario, Entrada.MOTIVO_ABASTECIMENTO);
 
     produtos = await manipularProdutoI.pegarLista();
     produto = produtos.first;
-    expect(produto.stock!.quantidade!, qtd +100);
+    expect(produto.stock!.quantidade!, qtd + 100);
   });
 }

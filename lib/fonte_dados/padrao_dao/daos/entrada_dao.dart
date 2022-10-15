@@ -15,8 +15,6 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
     var res = await (select(tabelaEntrada).join([
       leftOuterJoin(
           tabelaProduto, tabelaEntrada.idProduto.equalsExp(tabelaProduto.id)),
-      leftOuterJoin(tabelaRececcao,
-          tabelaEntrada.idRececcao.equalsExp(tabelaRececcao.id)),
       leftOuterJoin(
           tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto)),
     ])
@@ -27,30 +25,8 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
       var produto =
           linhaEntradaVsProdutoVsRececcao.readTableOrNull(tabelaProduto);
       var entrada = linhaEntradaVsProdutoVsRececcao.readTable(tabelaEntrada);
-      var receccao = linhaEntradaVsProdutoVsRececcao.readTable(tabelaRececcao);
       var stock = linhaEntradaVsProdutoVsRececcao.readTable(tabelaStock);
-      var cadaRececcao = Receccao(
-          id: receccao.id,
-          estado: receccao.estado,
-          idFuncionario: receccao.idFuncionario,
-          idProduto: receccao.idProduto,
-          quantidade: receccao.quantidade,
-          data: receccao.data);
-
-      var resRececcaoVsFuncionario = await select(tabelaRececcao).join([
-        leftOuterJoin(tabelaFuncionario,
-            tabelaRececcao.idFuncionario.equalsExp(tabelaFuncionario.id)),
-      ]).get();
-
-      for (var linhaRececcaoVsFuncionario in resRececcaoVsFuncionario) {
-        var funcionario =
-            linhaRececcaoVsFuncionario.readTable(tabelaFuncionario);
-        cadaRececcao.funcionario =
-            SerializadorFuncionario().fromTabela(funcionario);
-      }
-
       lista.add(Entrada(
-          receccao: cadaRececcao,
           produto: produto == null
               ? null
               : Produto(
@@ -84,8 +60,6 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
             .join([
       leftOuterJoin(
           tabelaProduto, tabelaEntrada.idProduto.equalsExp(tabelaProduto.id)),
-      leftOuterJoin(tabelaRececcao,
-          tabelaEntrada.idRececcao.equalsExp(tabelaRececcao.id)),
       leftOuterJoin(
           tabelaStock, tabelaProduto.id.equalsExp(tabelaStock.idProduto)),
     ])
@@ -96,31 +70,14 @@ class EntradaDao extends DatabaseAccessor<BancoDados> with _$EntradaDaoMixin {
       var produto =
           linhaEntradaVsProdutoVsRececcao.readTableOrNull(tabelaProduto);
       var entrada = linhaEntradaVsProdutoVsRececcao.readTable(tabelaEntrada);
-      var receccao = linhaEntradaVsProdutoVsRececcao.readTable(tabelaRececcao);
       var stock = linhaEntradaVsProdutoVsRececcao.readTable(tabelaStock);
-
-      var cadaRececcao = Receccao(
-          id: receccao.id,
-          estado: receccao.estado,
-          idFuncionario: receccao.idFuncionario,
-          idProduto: receccao.idProduto,
-          quantidade: receccao.quantidade,
-          data: receccao.data);
 
       var resRececcaoVsFuncionario = await select(tabelaRececcao).join([
         leftOuterJoin(tabelaFuncionario,
             tabelaRececcao.idFuncionario.equalsExp(tabelaFuncionario.id)),
       ]).get();
 
-      for (var linhaRececcaoVsFuncionario in resRececcaoVsFuncionario) {
-        var funcionario =
-            linhaRececcaoVsFuncionario.readTable(tabelaFuncionario);
-        cadaRececcao.funcionario =
-            SerializadorFuncionario().fromTabela(funcionario);
-      }
-
       lista.add(Entrada(
-          receccao: cadaRececcao,
           produto: produto == null
               ? null
               : Produto(

@@ -39,8 +39,6 @@ class ItemEntrada extends StatelessWidget {
             Text(
                 "Data da Entrada: ${entrada.data.toString().replaceAll(" ", " às ").replaceAll(".000", "")}"),
             Text("Motivo: ${entrada.motivo ?? "Sem Motivo"}"),
-            Text(
-                "Recebido por: ${entrada.receccao?.funcionario?.nomeCompelto ?? "Ninguem"}"),
           ],
         ),
       ),

@@ -12,11 +12,9 @@ import 'painel_c.dart';
 
 class PainelInvestimento extends StatelessWidget {
   late PainelInvestimentoC _c;
+  Function? accaoAoVoltar;
   final PainelGerenteC gerenteC;
-  PainelInvestimento({
-    Key? key,
-    required this.gerenteC,
-  }) {
+  PainelInvestimento({Key? key, required this.gerenteC, this.accaoAoVoltar}) {
     initiC();
   }
 
@@ -43,7 +41,7 @@ class PainelInvestimento extends StatelessWidget {
               _c.terminarSessao();
             },
             accaoAoVoltar: () {
-              gerenteC.irParaPainel(PainelActual.FUNCIONARIOS);
+              accaoAoVoltar!();
             },
           ),
         ),

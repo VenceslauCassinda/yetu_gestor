@@ -39,10 +39,6 @@ class EntradasC extends GetxController {
               .toString()
               .contains(f.toLowerCase()) ||
           (cada.quantidade ?? "").toString().contains(f.toLowerCase()) ||
-          (cada.receccao?.funcionario?.nomeCompelto ?? "")
-              .toString()
-              .toLowerCase()
-              .contains(f.toLowerCase()) ||
           (cada.motivo ?? "")
               .toString()
               .toLowerCase()
@@ -81,6 +77,7 @@ class EntradasC extends GetxController {
 }
 
 te(int a) async {
-  return await ManipularEntrada(ProvedorEntrada(), ManipularStock(ProvedorStock()))
+  return await ManipularEntrada(
+          ProvedorEntrada(), ManipularStock(ProvedorStock()))
       .pegarLista();
 }

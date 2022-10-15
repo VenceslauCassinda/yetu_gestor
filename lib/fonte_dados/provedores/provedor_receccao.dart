@@ -9,8 +9,8 @@ class ProvedorRececcao implements ProvedorRececcaoI {
     _dao = RececcaoDao(Get.find());
   }
   @override
-  Future<void> receberProduto(Receccao receccao) async {
-    await _dao.adicionarRececcao(receccao);
+  Future<int> receberProduto(Receccao receccao) async {
+    return await _dao.adicionarRececcao(receccao);
   }
 
   @override
@@ -38,11 +38,19 @@ class ProvedorRececcao implements ProvedorRececcaoI {
     var res = await _dao.pegarRececcaoDeId(id);
     if (res != null) {
       return Receccao(
-          estado: res.estado,
-          idFuncionario: res.idFuncionario,
-          idProduto: res.idProduto,
-          quantidade: res.quantidade,
-          data: res.data);
+        estado: res.estado,
+        pagavel: res.pagavel,
+        paga: res.paga,
+        idFuncionario: res.idFuncionario,
+        idPagante: res.idPagante,
+        idProduto: res.idProduto,
+        custoAquisicao: res.custoAquisicao,
+        precoLote: res.precoLote,
+        quantidadeLotes: res.quantidadeLotes,
+        quantidadePorLotes: res.quantidadePorLotes,
+        data: res.data,
+        dataPagamento: res.dataPagamento,
+      );
     }
     return null;
   }
@@ -50,5 +58,15 @@ class ProvedorRececcao implements ProvedorRececcaoI {
   @override
   Future<List<Receccao>> pegarListaRececcoesFuncionario(int id) async {
     return await _dao.todasDoFuncionario(id);
+  }
+
+  @override
+  Future<void> removerTudo() async {
+    await _dao.removerTudo();
+  }
+
+  @override
+  Future<void> removerAntes(DateTime data) async {
+    await _dao.removerAntes(data);
   }
 }

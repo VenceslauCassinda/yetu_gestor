@@ -2972,25 +2972,54 @@ class TabelaRececcaoData extends DataClass
   final int id;
   final int estado;
   final int idFuncionario;
+  final int? idPagante;
   final int idProduto;
-  final int quantidade;
+  final int quantidadePorLotes;
+  final int quantidadeLotes;
+  final double precoLote;
+  final double custoAquisicao;
   final DateTime data;
+  final DateTime? dataPagamento;
+  final bool? pagavel;
+  final bool? paga;
   const TabelaRececcaoData(
       {required this.id,
       required this.estado,
       required this.idFuncionario,
+      this.idPagante,
       required this.idProduto,
-      required this.quantidade,
-      required this.data});
+      required this.quantidadePorLotes,
+      required this.quantidadeLotes,
+      required this.precoLote,
+      required this.custoAquisicao,
+      required this.data,
+      this.dataPagamento,
+      this.pagavel,
+      this.paga});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['estado'] = Variable<int>(estado);
     map['id_funcionario'] = Variable<int>(idFuncionario);
+    if (!nullToAbsent || idPagante != null) {
+      map['id_pagante'] = Variable<int>(idPagante);
+    }
     map['id_produto'] = Variable<int>(idProduto);
-    map['quantidade'] = Variable<int>(quantidade);
+    map['quantidade_por_lotes'] = Variable<int>(quantidadePorLotes);
+    map['quantidade_lotes'] = Variable<int>(quantidadeLotes);
+    map['preco_lote'] = Variable<double>(precoLote);
+    map['custo_aquisicao'] = Variable<double>(custoAquisicao);
     map['data'] = Variable<DateTime>(data);
+    if (!nullToAbsent || dataPagamento != null) {
+      map['data_pagamento'] = Variable<DateTime>(dataPagamento);
+    }
+    if (!nullToAbsent || pagavel != null) {
+      map['pagavel'] = Variable<bool>(pagavel);
+    }
+    if (!nullToAbsent || paga != null) {
+      map['paga'] = Variable<bool>(paga);
+    }
     return map;
   }
 
@@ -2999,9 +3028,22 @@ class TabelaRececcaoData extends DataClass
       id: Value(id),
       estado: Value(estado),
       idFuncionario: Value(idFuncionario),
+      idPagante: idPagante == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idPagante),
       idProduto: Value(idProduto),
-      quantidade: Value(quantidade),
+      quantidadePorLotes: Value(quantidadePorLotes),
+      quantidadeLotes: Value(quantidadeLotes),
+      precoLote: Value(precoLote),
+      custoAquisicao: Value(custoAquisicao),
       data: Value(data),
+      dataPagamento: dataPagamento == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dataPagamento),
+      pagavel: pagavel == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pagavel),
+      paga: paga == null && nullToAbsent ? const Value.absent() : Value(paga),
     );
   }
 
@@ -3012,9 +3054,16 @@ class TabelaRececcaoData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       estado: serializer.fromJson<int>(json['estado']),
       idFuncionario: serializer.fromJson<int>(json['idFuncionario']),
+      idPagante: serializer.fromJson<int?>(json['idPagante']),
       idProduto: serializer.fromJson<int>(json['idProduto']),
-      quantidade: serializer.fromJson<int>(json['quantidade']),
+      quantidadePorLotes: serializer.fromJson<int>(json['quantidadePorLotes']),
+      quantidadeLotes: serializer.fromJson<int>(json['quantidadeLotes']),
+      precoLote: serializer.fromJson<double>(json['precoLote']),
+      custoAquisicao: serializer.fromJson<double>(json['custoAquisicao']),
       data: serializer.fromJson<DateTime>(json['data']),
+      dataPagamento: serializer.fromJson<DateTime?>(json['dataPagamento']),
+      pagavel: serializer.fromJson<bool?>(json['pagavel']),
+      paga: serializer.fromJson<bool?>(json['paga']),
     );
   }
   @override
@@ -3024,9 +3073,16 @@ class TabelaRececcaoData extends DataClass
       'id': serializer.toJson<int>(id),
       'estado': serializer.toJson<int>(estado),
       'idFuncionario': serializer.toJson<int>(idFuncionario),
+      'idPagante': serializer.toJson<int?>(idPagante),
       'idProduto': serializer.toJson<int>(idProduto),
-      'quantidade': serializer.toJson<int>(quantidade),
+      'quantidadePorLotes': serializer.toJson<int>(quantidadePorLotes),
+      'quantidadeLotes': serializer.toJson<int>(quantidadeLotes),
+      'precoLote': serializer.toJson<double>(precoLote),
+      'custoAquisicao': serializer.toJson<double>(custoAquisicao),
       'data': serializer.toJson<DateTime>(data),
+      'dataPagamento': serializer.toJson<DateTime?>(dataPagamento),
+      'pagavel': serializer.toJson<bool?>(pagavel),
+      'paga': serializer.toJson<bool?>(paga),
     };
   }
 
@@ -3034,16 +3090,31 @@ class TabelaRececcaoData extends DataClass
           {int? id,
           int? estado,
           int? idFuncionario,
+          Value<int?> idPagante = const Value.absent(),
           int? idProduto,
-          int? quantidade,
-          DateTime? data}) =>
+          int? quantidadePorLotes,
+          int? quantidadeLotes,
+          double? precoLote,
+          double? custoAquisicao,
+          DateTime? data,
+          Value<DateTime?> dataPagamento = const Value.absent(),
+          Value<bool?> pagavel = const Value.absent(),
+          Value<bool?> paga = const Value.absent()}) =>
       TabelaRececcaoData(
         id: id ?? this.id,
         estado: estado ?? this.estado,
         idFuncionario: idFuncionario ?? this.idFuncionario,
+        idPagante: idPagante.present ? idPagante.value : this.idPagante,
         idProduto: idProduto ?? this.idProduto,
-        quantidade: quantidade ?? this.quantidade,
+        quantidadePorLotes: quantidadePorLotes ?? this.quantidadePorLotes,
+        quantidadeLotes: quantidadeLotes ?? this.quantidadeLotes,
+        precoLote: precoLote ?? this.precoLote,
+        custoAquisicao: custoAquisicao ?? this.custoAquisicao,
         data: data ?? this.data,
+        dataPagamento:
+            dataPagamento.present ? dataPagamento.value : this.dataPagamento,
+        pagavel: pagavel.present ? pagavel.value : this.pagavel,
+        paga: paga.present ? paga.value : this.paga,
       );
   @override
   String toString() {
@@ -3051,16 +3122,35 @@ class TabelaRececcaoData extends DataClass
           ..write('id: $id, ')
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
+          ..write('idPagante: $idPagante, ')
           ..write('idProduto: $idProduto, ')
-          ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('quantidadePorLotes: $quantidadePorLotes, ')
+          ..write('quantidadeLotes: $quantidadeLotes, ')
+          ..write('precoLote: $precoLote, ')
+          ..write('custoAquisicao: $custoAquisicao, ')
+          ..write('data: $data, ')
+          ..write('dataPagamento: $dataPagamento, ')
+          ..write('pagavel: $pagavel, ')
+          ..write('paga: $paga')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, estado, idFuncionario, idProduto, quantidade, data);
+  int get hashCode => Object.hash(
+      id,
+      estado,
+      idFuncionario,
+      idPagante,
+      idProduto,
+      quantidadePorLotes,
+      quantidadeLotes,
+      precoLote,
+      custoAquisicao,
+      data,
+      dataPagamento,
+      pagavel,
+      paga);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3068,53 +3158,99 @@ class TabelaRececcaoData extends DataClass
           other.id == this.id &&
           other.estado == this.estado &&
           other.idFuncionario == this.idFuncionario &&
+          other.idPagante == this.idPagante &&
           other.idProduto == this.idProduto &&
-          other.quantidade == this.quantidade &&
-          other.data == this.data);
+          other.quantidadePorLotes == this.quantidadePorLotes &&
+          other.quantidadeLotes == this.quantidadeLotes &&
+          other.precoLote == this.precoLote &&
+          other.custoAquisicao == this.custoAquisicao &&
+          other.data == this.data &&
+          other.dataPagamento == this.dataPagamento &&
+          other.pagavel == this.pagavel &&
+          other.paga == this.paga);
 }
 
 class TabelaRececcaoCompanion extends UpdateCompanion<TabelaRececcaoData> {
   final Value<int> id;
   final Value<int> estado;
   final Value<int> idFuncionario;
+  final Value<int?> idPagante;
   final Value<int> idProduto;
-  final Value<int> quantidade;
+  final Value<int> quantidadePorLotes;
+  final Value<int> quantidadeLotes;
+  final Value<double> precoLote;
+  final Value<double> custoAquisicao;
   final Value<DateTime> data;
+  final Value<DateTime?> dataPagamento;
+  final Value<bool?> pagavel;
+  final Value<bool?> paga;
   const TabelaRececcaoCompanion({
     this.id = const Value.absent(),
     this.estado = const Value.absent(),
     this.idFuncionario = const Value.absent(),
+    this.idPagante = const Value.absent(),
     this.idProduto = const Value.absent(),
-    this.quantidade = const Value.absent(),
+    this.quantidadePorLotes = const Value.absent(),
+    this.quantidadeLotes = const Value.absent(),
+    this.precoLote = const Value.absent(),
+    this.custoAquisicao = const Value.absent(),
     this.data = const Value.absent(),
+    this.dataPagamento = const Value.absent(),
+    this.pagavel = const Value.absent(),
+    this.paga = const Value.absent(),
   });
   TabelaRececcaoCompanion.insert({
     this.id = const Value.absent(),
     required int estado,
     required int idFuncionario,
+    this.idPagante = const Value.absent(),
     required int idProduto,
-    required int quantidade,
+    required int quantidadePorLotes,
+    required int quantidadeLotes,
+    required double precoLote,
+    required double custoAquisicao,
     required DateTime data,
+    this.dataPagamento = const Value.absent(),
+    this.pagavel = const Value.absent(),
+    this.paga = const Value.absent(),
   })  : estado = Value(estado),
         idFuncionario = Value(idFuncionario),
         idProduto = Value(idProduto),
-        quantidade = Value(quantidade),
+        quantidadePorLotes = Value(quantidadePorLotes),
+        quantidadeLotes = Value(quantidadeLotes),
+        precoLote = Value(precoLote),
+        custoAquisicao = Value(custoAquisicao),
         data = Value(data);
   static Insertable<TabelaRececcaoData> custom({
     Expression<int>? id,
     Expression<int>? estado,
     Expression<int>? idFuncionario,
+    Expression<int>? idPagante,
     Expression<int>? idProduto,
-    Expression<int>? quantidade,
+    Expression<int>? quantidadePorLotes,
+    Expression<int>? quantidadeLotes,
+    Expression<double>? precoLote,
+    Expression<double>? custoAquisicao,
     Expression<DateTime>? data,
+    Expression<DateTime>? dataPagamento,
+    Expression<bool>? pagavel,
+    Expression<bool>? paga,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (estado != null) 'estado': estado,
       if (idFuncionario != null) 'id_funcionario': idFuncionario,
+      if (idPagante != null) 'id_pagante': idPagante,
       if (idProduto != null) 'id_produto': idProduto,
-      if (quantidade != null) 'quantidade': quantidade,
+      if (quantidadePorLotes != null)
+        'quantidade_por_lotes': quantidadePorLotes,
+      if (quantidadeLotes != null) 'quantidade_lotes': quantidadeLotes,
+      if (precoLote != null) 'preco_lote': precoLote,
+      if (custoAquisicao != null) 'custo_aquisicao': custoAquisicao,
       if (data != null) 'data': data,
+      if (dataPagamento != null) 'data_pagamento': dataPagamento,
+      if (pagavel != null) 'pagavel': pagavel,
+      if (paga != null) 'paga': paga,
     });
   }
 
@@ -3122,16 +3258,30 @@ class TabelaRececcaoCompanion extends UpdateCompanion<TabelaRececcaoData> {
       {Value<int>? id,
       Value<int>? estado,
       Value<int>? idFuncionario,
+      Value<int?>? idPagante,
       Value<int>? idProduto,
-      Value<int>? quantidade,
-      Value<DateTime>? data}) {
+      Value<int>? quantidadePorLotes,
+      Value<int>? quantidadeLotes,
+      Value<double>? precoLote,
+      Value<double>? custoAquisicao,
+      Value<DateTime>? data,
+      Value<DateTime?>? dataPagamento,
+      Value<bool?>? pagavel,
+      Value<bool?>? paga}) {
     return TabelaRececcaoCompanion(
       id: id ?? this.id,
       estado: estado ?? this.estado,
       idFuncionario: idFuncionario ?? this.idFuncionario,
+      idPagante: idPagante ?? this.idPagante,
       idProduto: idProduto ?? this.idProduto,
-      quantidade: quantidade ?? this.quantidade,
+      quantidadePorLotes: quantidadePorLotes ?? this.quantidadePorLotes,
+      quantidadeLotes: quantidadeLotes ?? this.quantidadeLotes,
+      precoLote: precoLote ?? this.precoLote,
+      custoAquisicao: custoAquisicao ?? this.custoAquisicao,
       data: data ?? this.data,
+      dataPagamento: dataPagamento ?? this.dataPagamento,
+      pagavel: pagavel ?? this.pagavel,
+      paga: paga ?? this.paga,
     );
   }
 
@@ -3147,14 +3297,35 @@ class TabelaRececcaoCompanion extends UpdateCompanion<TabelaRececcaoData> {
     if (idFuncionario.present) {
       map['id_funcionario'] = Variable<int>(idFuncionario.value);
     }
+    if (idPagante.present) {
+      map['id_pagante'] = Variable<int>(idPagante.value);
+    }
     if (idProduto.present) {
       map['id_produto'] = Variable<int>(idProduto.value);
     }
-    if (quantidade.present) {
-      map['quantidade'] = Variable<int>(quantidade.value);
+    if (quantidadePorLotes.present) {
+      map['quantidade_por_lotes'] = Variable<int>(quantidadePorLotes.value);
+    }
+    if (quantidadeLotes.present) {
+      map['quantidade_lotes'] = Variable<int>(quantidadeLotes.value);
+    }
+    if (precoLote.present) {
+      map['preco_lote'] = Variable<double>(precoLote.value);
+    }
+    if (custoAquisicao.present) {
+      map['custo_aquisicao'] = Variable<double>(custoAquisicao.value);
     }
     if (data.present) {
       map['data'] = Variable<DateTime>(data.value);
+    }
+    if (dataPagamento.present) {
+      map['data_pagamento'] = Variable<DateTime>(dataPagamento.value);
+    }
+    if (pagavel.present) {
+      map['pagavel'] = Variable<bool>(pagavel.value);
+    }
+    if (paga.present) {
+      map['paga'] = Variable<bool>(paga.value);
     }
     return map;
   }
@@ -3165,9 +3336,16 @@ class TabelaRececcaoCompanion extends UpdateCompanion<TabelaRececcaoData> {
           ..write('id: $id, ')
           ..write('estado: $estado, ')
           ..write('idFuncionario: $idFuncionario, ')
+          ..write('idPagante: $idPagante, ')
           ..write('idProduto: $idProduto, ')
-          ..write('quantidade: $quantidade, ')
-          ..write('data: $data')
+          ..write('quantidadePorLotes: $quantidadePorLotes, ')
+          ..write('quantidadeLotes: $quantidadeLotes, ')
+          ..write('precoLote: $precoLote, ')
+          ..write('custoAquisicao: $custoAquisicao, ')
+          ..write('data: $data, ')
+          ..write('dataPagamento: $dataPagamento, ')
+          ..write('pagavel: $pagavel, ')
+          ..write('paga: $paga')
           ..write(')'))
         .toString();
   }
@@ -3197,24 +3375,80 @@ class $TabelaRececcaoTable extends TabelaRececcao
   late final GeneratedColumn<int> idFuncionario = GeneratedColumn<int>(
       'id_funcionario', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  final VerificationMeta _idPaganteMeta = const VerificationMeta('idPagante');
+  @override
+  late final GeneratedColumn<int> idPagante = GeneratedColumn<int>(
+      'id_pagante', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _idProdutoMeta = const VerificationMeta('idProduto');
   @override
   late final GeneratedColumn<int> idProduto = GeneratedColumn<int>(
       'id_produto', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _quantidadeMeta = const VerificationMeta('quantidade');
+  final VerificationMeta _quantidadePorLotesMeta =
+      const VerificationMeta('quantidadePorLotes');
   @override
-  late final GeneratedColumn<int> quantidade = GeneratedColumn<int>(
-      'quantidade', aliasedName, false,
+  late final GeneratedColumn<int> quantidadePorLotes = GeneratedColumn<int>(
+      'quantidade_por_lotes', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
+  final VerificationMeta _quantidadeLotesMeta =
+      const VerificationMeta('quantidadeLotes');
+  @override
+  late final GeneratedColumn<int> quantidadeLotes = GeneratedColumn<int>(
+      'quantidade_lotes', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  final VerificationMeta _precoLoteMeta = const VerificationMeta('precoLote');
+  @override
+  late final GeneratedColumn<double> precoLote = GeneratedColumn<double>(
+      'preco_lote', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  final VerificationMeta _custoAquisicaoMeta =
+      const VerificationMeta('custoAquisicao');
+  @override
+  late final GeneratedColumn<double> custoAquisicao = GeneratedColumn<double>(
+      'custo_aquisicao', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
   final VerificationMeta _dataMeta = const VerificationMeta('data');
   @override
   late final GeneratedColumn<DateTime> data = GeneratedColumn<DateTime>(
       'data', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  final VerificationMeta _dataPagamentoMeta =
+      const VerificationMeta('dataPagamento');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, estado, idFuncionario, idProduto, quantidade, data];
+  late final GeneratedColumn<DateTime> dataPagamento =
+      GeneratedColumn<DateTime>('data_pagamento', aliasedName, true,
+          type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  final VerificationMeta _pagavelMeta = const VerificationMeta('pagavel');
+  @override
+  late final GeneratedColumn<bool> pagavel = GeneratedColumn<bool>(
+      'pagavel', aliasedName, true,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK ("pagavel" IN (0, 1))');
+  final VerificationMeta _pagaMeta = const VerificationMeta('paga');
+  @override
+  late final GeneratedColumn<bool> paga = GeneratedColumn<bool>(
+      'paga', aliasedName, true,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK ("paga" IN (0, 1))');
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        estado,
+        idFuncionario,
+        idPagante,
+        idProduto,
+        quantidadePorLotes,
+        quantidadeLotes,
+        precoLote,
+        custoAquisicao,
+        data,
+        dataPagamento,
+        pagavel,
+        paga
+      ];
   @override
   String get aliasedName => _alias ?? 'tabela_receccao';
   @override
@@ -3241,25 +3475,65 @@ class $TabelaRececcaoTable extends TabelaRececcao
     } else if (isInserting) {
       context.missing(_idFuncionarioMeta);
     }
+    if (data.containsKey('id_pagante')) {
+      context.handle(_idPaganteMeta,
+          idPagante.isAcceptableOrUnknown(data['id_pagante']!, _idPaganteMeta));
+    }
     if (data.containsKey('id_produto')) {
       context.handle(_idProdutoMeta,
           idProduto.isAcceptableOrUnknown(data['id_produto']!, _idProdutoMeta));
     } else if (isInserting) {
       context.missing(_idProdutoMeta);
     }
-    if (data.containsKey('quantidade')) {
+    if (data.containsKey('quantidade_por_lotes')) {
       context.handle(
-          _quantidadeMeta,
-          quantidade.isAcceptableOrUnknown(
-              data['quantidade']!, _quantidadeMeta));
+          _quantidadePorLotesMeta,
+          quantidadePorLotes.isAcceptableOrUnknown(
+              data['quantidade_por_lotes']!, _quantidadePorLotesMeta));
     } else if (isInserting) {
-      context.missing(_quantidadeMeta);
+      context.missing(_quantidadePorLotesMeta);
+    }
+    if (data.containsKey('quantidade_lotes')) {
+      context.handle(
+          _quantidadeLotesMeta,
+          quantidadeLotes.isAcceptableOrUnknown(
+              data['quantidade_lotes']!, _quantidadeLotesMeta));
+    } else if (isInserting) {
+      context.missing(_quantidadeLotesMeta);
+    }
+    if (data.containsKey('preco_lote')) {
+      context.handle(_precoLoteMeta,
+          precoLote.isAcceptableOrUnknown(data['preco_lote']!, _precoLoteMeta));
+    } else if (isInserting) {
+      context.missing(_precoLoteMeta);
+    }
+    if (data.containsKey('custo_aquisicao')) {
+      context.handle(
+          _custoAquisicaoMeta,
+          custoAquisicao.isAcceptableOrUnknown(
+              data['custo_aquisicao']!, _custoAquisicaoMeta));
+    } else if (isInserting) {
+      context.missing(_custoAquisicaoMeta);
     }
     if (data.containsKey('data')) {
       context.handle(
           _dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
     } else if (isInserting) {
       context.missing(_dataMeta);
+    }
+    if (data.containsKey('data_pagamento')) {
+      context.handle(
+          _dataPagamentoMeta,
+          dataPagamento.isAcceptableOrUnknown(
+              data['data_pagamento']!, _dataPagamentoMeta));
+    }
+    if (data.containsKey('pagavel')) {
+      context.handle(_pagavelMeta,
+          pagavel.isAcceptableOrUnknown(data['pagavel']!, _pagavelMeta));
+    }
+    if (data.containsKey('paga')) {
+      context.handle(
+          _pagaMeta, paga.isAcceptableOrUnknown(data['paga']!, _pagaMeta));
     }
     return context;
   }
@@ -3276,12 +3550,26 @@ class $TabelaRececcaoTable extends TabelaRececcao
           .read(DriftSqlType.int, data['${effectivePrefix}estado'])!,
       idFuncionario: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id_funcionario'])!,
+      idPagante: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id_pagante']),
       idProduto: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id_produto'])!,
-      quantidade: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}quantidade'])!,
+      quantidadePorLotes: attachedDatabase.options.types.read(
+          DriftSqlType.int, data['${effectivePrefix}quantidade_por_lotes'])!,
+      quantidadeLotes: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}quantidade_lotes'])!,
+      precoLote: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}preco_lote'])!,
+      custoAquisicao: attachedDatabase.options.types.read(
+          DriftSqlType.double, data['${effectivePrefix}custo_aquisicao'])!,
       data: attachedDatabase.options.types
           .read(DriftSqlType.dateTime, data['${effectivePrefix}data'])!,
+      dataPagamento: attachedDatabase.options.types.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}data_pagamento']),
+      pagavel: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}pagavel']),
+      paga: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}paga']),
     );
   }
 

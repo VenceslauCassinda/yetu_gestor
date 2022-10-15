@@ -9,9 +9,8 @@ import 'layouts/produtos_c.dart';
 
 class PainelProdutos extends StatelessWidget {
   late ProdutosC _c;
-  PainelProdutos({
-    Key? key,
-  }) {
+  Function? accaoAoVoltar;
+  PainelProdutos({Key? key, this.accaoAoVoltar}) {
     initiC();
   }
 
@@ -37,6 +36,9 @@ class PainelProdutos extends StatelessWidget {
             },
             accaoAoSair: () {
               _c.terminarSessao();
+            },
+            accaoAoVoltar: () {
+              accaoAoVoltar!();
             },
           ),
         ),
@@ -74,9 +76,10 @@ class PainelProdutos extends StatelessWidget {
               ],
             );
           }
-          return Expanded(child: LayoutProdutos(lista: _c.lista, c: _c));
+          return Container(
+              height: MediaQuery.of(context).size.height * .485,
+              child: LayoutProdutos(lista: _c.lista, c: _c));
         }),
-        Spacer(),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
